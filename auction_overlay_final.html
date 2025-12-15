@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IPL Auction Overlay</title>
+
+<style>
+body {
+  margin: 0;
+  background: transparent;
+  font-family: Arial, sans-serif;
+}
+.box {
+  width: 420px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #102a43, #243b55);
+  border-radius: 12px;
+  color: #fff;
+}
+.title {
+  color: #ffcc00;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.player {
+  font-size: 24px;
+  font-weight: bold;
+}
+.team {
+  font-size: 18px;
+  opacity: 0.9;
+}
+.price {
+  font-size: 20px;
+  color: #00ffae;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <div class="title">🔥 SOLD 🔥</div>
+  <div class="player" id="player">Waiting…</div>
+  <div class="team" id="team"></div>
+  <div class="price" id="price"></div>
+</div>
+
+<script>
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/1sjyD7fem0Nh20xoRe0hZtB7YpmrNkV38hXDBZgFaSJw/gviz/tq?tqx=out:csv&sheet=DASHBOARD_STREAM";
+
+async function loadData() {
+  try {
+    const res = await fetch(CSV_URL + "&_=" + Date.now());
+    const text = await res.text();
+
+    const rows = text.split("\n").map(r =>
+      r.split(",").map(v => v.replace(/^"|"$/g, ""))
+    );
+
+    // K4, K5, K6 → rows 4,5,6 | column K = index 10
+    document.getElementById("player").innerText = rows[3]?.[10] || "";
+    document.getElementById("team").innerText   = rows[4]?.[10] || "";
+    document.getElementById("price").innerText  =
+      rows[5]?.[10] ? `₹ ${rows[5][10]} Cr` : "";
+
+  } catch (e) {
+    document.getElementById("player").innerText = "Error";
+  }
+}
+
+setInterval(loadData, 2000);
+loadData();
+</script>
+
+</body>
+</html>
