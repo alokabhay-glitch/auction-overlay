@@ -1,88 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Auction Action</title>
+  <meta charset="UTF-8" />
+  <title>Auction Action Test</title>
 
-<style>
-body {
-  margin: 0;
-  background: linear-gradient(160deg,#06161c,#0d2b33);
-  font-family: Arial, sans-serif;
-  color: #fff;
-}
+  <style>
+    body {
+      margin: 0;
+      background: #071a1f;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
 
-.container {
-  width: 420px;
-  padding: 16px;
-  border-radius: 14px;
-  background: rgba(20,50,58,0.85);
-}
+    .box {
+      width: 520px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0f2c33, #123b42);
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
 
-.header {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: .5px;
+    }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 70px 80px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 14px;
+    }
 
-.team {
-  opacity: 0.7;
-  text-align: center;
-}
-
-.price {
-  color: #2ef2b1;
-  text-align: right;
-}
-</style>
+    .price {
+      color: #2dffb3;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="header">🔥 AUCTION ACTION</div>
-  <div id="list">Loading...</div>
+
+<div class="box">
+  <h2>🔥 AUCTION ACTION</h2>
+  <div id="list">Loading…</div>
 </div>
 
 <script>
-function callback(data) {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxuzasRc-NmWy4JJeEYJGYVRakHOefPiP_vdrpWm1Xr_IKH7c74_t1d4KLflwXvwxU9/exec";
 
-  if (!data || data.length === 0) {
-    list.innerHTML = "No activity yet";
-    return;
+  function callback(data) {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if (!data.actions || data.actions.length === 0) {
+      list.innerHTML = "No auction actions yet";
+      return;
+    }
+
+    data.actions.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <span>${a.player} → ${a.team}</span>
+        <span class="price">₹ ${a.price} Cr</span>
+      `;
+      list.appendChild(div);
+    });
   }
 
-  data.slice(0, 10).forEach(p => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div>${p.player}</div>
-      <div class="team">${p.team}</div>
-      <div class="price">₹ ${p.price}</div>
-    `;
-    list.appendChild(row);
-  });
-}
-</script>
+  function loadData() {
+    const s = document.createElement("script");
+    s.src = SCRIPT_URL + "?callback=callback&t=" + Date.now();
+    document.body.appendChild(s);
+  }
 
-<!-- 🔥 THIS LINE IS CRITICAL -->
-<script src="https://script.google.com/macros/s/AKfycbySgJmf-f2tVWPWuViuWJGbGnI7Ypzb5ooiHH4etmZ2rTKVQGnYQEYYnFbiic02Aai9/exec?mode=action&callback=callback"></script>
-
-<!-- Auto refresh -->
-<script>
-setInterval(() => {
-  const s = document.createElement("script");
-  s.src = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec?mode=action&callback=callback&t=" + Date.now();
-  document.body.appendChild(s);
-}, 3000);
+  loadData();
+  setInterval(loadData, 3000);
 </script>
 
 </body>
