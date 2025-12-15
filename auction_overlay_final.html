@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>IPL Auction Overlay</title>
 
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
 <style>
 body {
   margin: 0;
@@ -48,31 +50,36 @@ body {
 </div>
 
 <script>
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/1sjyD7fem0Nh20xoRe0hZtB7YpmrNkV38hXDBZgFaSJw/gviz/tq?tqx=out:csv&sheet=DASHBOARD_STREAM";
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(loadData);
 
-async function loadData() {
-  try {
-    const res = await fetch(CSV_URL + "&_=" + Date.now());
-    const text = await res.text();
+function loadData() {
+  const sheetId = "1sjyD7fem0Nh20xoRe0hZtB7YpmrNkV38hXDBZgFaSJw";
+  const sheetName = "DASHBOARD_STREAM";
+  const query = new google.visualization.Query(
+    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetName}`
+  );
 
-    const rows = text.split("\n").map(r =>
-      r.split(",").map(v => v.replace(/^"|"$/g, ""))
-    );
+  query.send(function(response) {
+    if (response.isError()) return;
 
-    // K4, K5, K6 → rows 4,5,6 | column K = index 10
-    document.getElementById("player").innerText = rows[3]?.[10] || "";
-    document.getElementById("team").innerText   = rows[4]?.[10] || "";
-    document.getElementById("price").innerText  =
-      rows[5]?.[10] ? `₹ ${rows[5][10]} Cr` : "";
+    const data = response.getDataTable();
 
-  } catch (e) {
-    document.getElementById("player").innerText = "Error";
-  }
+    // K4, K5, K6 → row 3,4,5 col 10
+    document.getElementById("player").innerText =
+      data.getValue(3, 10) || "";
+
+    document.getElementById("team").innerText =
+      data.getValue(4, 10) || "";
+
+    const price = data.getValue(5, 10);
+    document.getElementById("price").innerText =
+      price ? `₹ ${price} Cr` : "";
+  });
 }
 
+// refresh every 2 seconds
 setInterval(loadData, 2000);
-loadData();
 </script>
 
 </body>
