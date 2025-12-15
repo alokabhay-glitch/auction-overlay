@@ -1,33 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Team Squad Test</title>
+<meta charset="UTF-8">
+<title>Team Squad Overlay</title>
+
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #fff;
+  }
+
+  .panel {
+    width: 420px;
+    background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+
+  .header {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .list {
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 60px 80px;
+    gap: 6px;
+    padding: 8px 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .role {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .price {
+    text-align: right;
+    color: #00ffb3;
+    font-weight: 700;
+  }
+
+  /* Scrollbar (OBS friendly) */
+  .list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+  }
+</style>
 </head>
+
 <body>
 
-<h2 id="team">Loading team...</h2>
-<ul id="list"></ul>
+<div class="panel">
+  <div class="header" id="team">TEAM SQUAD</div>
+  <div class="list" id="list">Loading...</div>
+</div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUK0HO-5fWygqWNJdohmBkOtsnsB9CNTb7VKTx1uaVvHMwgdacxsy_vhM7GNDguDfT/exec?mode=team&callback=handle";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUK0HO-5fWygqWNJdohmBkOtsnsB9CNTb7VKTx1uaVvHMwgdacxsy_vhM7GNDguDfT/exec";
 
   function handle(data) {
-    document.getElementById("team").innerText = data.team + " Squad";
+    document.getElementById("team").innerText = data.team + " – FULL SQUAD";
 
-    const ul = document.getElementById("list");
-    ul.innerHTML = "";
+    const list = document.getElementById("list");
+    list.innerHTML = "";
 
     data.squad.forEach(p => {
-      const li = document.createElement("li");
-      li.innerText = `${p.name} | ${p.role} | ₹${p.price} | ${p.source}`;
-      ul.appendChild(li);
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <div class="name">${p.name}</div>
+        <div class="role">${p.role}</div>
+        <div class="price">₹ ${p.price}</div>
+      `;
+      list.appendChild(row);
     });
   }
 
-  const s = document.createElement("script");
-  s.src = SCRIPT_URL + "&t=" + Date.now();
-  document.body.appendChild(s);
+  function load() {
+    const s = document.createElement("script");
+    s.src = SCRIPT_URL + "&t=" + Date.now();
+    document.body.appendChild(s);
+  }
+
+  load();
+  setInterval(load, 4000);
 </script>
 
 </body>
