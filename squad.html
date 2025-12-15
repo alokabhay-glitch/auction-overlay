@@ -1,87 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Squad Overlay</title>
+  <meta charset="UTF-8" />
+  <title>Team Squad Overlay</title>
 
-<style>
-body {
-  margin: 0;
-  background: transparent;
-  font-family: "Segoe UI", Arial, sans-serif;
-}
+  <style>
+    body {
+      margin: 0;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #fff;
+    }
 
-.panel {
-  width: 520px;
-  background: linear-gradient(135deg, #0f2027, #203a43);
-  color: #fff;
-  border-radius: 18px;
-  padding: 18px;
-}
+    .card {
+      width: 520px;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
 
-.header {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
+    .header {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
 
-.list {
-  max-height: 360px;
-  overflow: hidden;
-}
+    .list {
+      max-height: 420px;
+      overflow: hidden;
+    }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 70px 80px;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  font-size: 14px;
-}
+    .row {
+      display: grid;
+      grid-template-columns: 1.8fr 0.6fr 0.8fr;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+    }
 
-.role {
-  opacity: 0.8;
-}
+    .row:last-child {
+      border-bottom: none;
+    }
 
-.price {
-  color: #00ffc6;
-  text-align: right;
-}
-</style>
+    .role {
+      text-align: center;
+      opacity: 0.85;
+    }
+
+    .price {
+      text-align: right;
+      color: #00ffb3;
+      font-weight: bold;
+    }
+
+    .loading {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 
 <body>
-<div class="panel">
-  <div class="header" id="team">TEAM SQUAD</div>
-  <div class="list" id="list">Loading...</div>
-</div>
 
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb3SJGJNQJr2NPSWFLEidsOzgJpvX7v691WEo68FcHwB8jeDt_SY2GaYi3BFHdMh8Q/exec";
+  <div class="card">
+    <div class="header" id="team">TEAM SQUAD</div>
+    <div class="list" id="list">
+      <div class="loading">Loading...</div>
+    </div>
+  </div>
 
-function handle(data) {
-  document.getElementById("team").innerText = data.team + " – FULL SQUAD";
+  <script>
+    // 🔴 IMPORTANT: USE ONLY BASE SCRIPT URL + mode
+    const SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbzb3SJGJNQJr2NPSWfLEids0zgJpvX7v691WEo68FcHwB8jeDt_SY2GaYi3BFHdMh8Q/exec?mode=team";
 
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+    // ✅ MUST be global for GitHub Pages
+    window.handle = function (data) {
+      if (!data || !data.squad) return;
 
-  data.squad.forEach(p => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div>${p.name}</div>
-      <div class="role">${p.role}</div>
-      <div class="price">${p.price ? "₹ " + p.price : ""}</div>
-    `;
-    list.appendChild(row);
-  });
-}
+      document.getElementById("team").innerText =
+        data.team + " – FULL SQUAD";
 
-setInterval(() => {
-  const s = document.createElement("script");
-  s.src = SCRIPT_URL + "&t=" + Date.now();
-  document.body.appendChild(s);
-}, 3000);
-</script>
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      data.squad.forEach(p => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <div>${p.name}</div>
+          <div class="role">${p.role}</div>
+          <div class="price">${p.price ? "₹ " + p.price + " Cr" : ""}</div>
+        `;
+        list.appendChild(row);
+      });
+    };
+
+    // 🔄 Auto refresh every 3 sec
+    function fetchData() {
+      const s = document.createElement("script");
+      s.src = SCRIPT_URL + "&_=" + Date.now();
+      document.body.appendChild(s);
+    }
+
+    fetchData();
+    setInterval(fetchData, 3000);
+  </script>
+
 </body>
 </html>
