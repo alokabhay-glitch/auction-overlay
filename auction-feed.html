@@ -2,123 +2,86 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Auction Action Feed</title>
+<title>Auction Action</title>
 
 <style>
 body {
-    margin: 0;
-    width: 520px;
-    height: 900px;
-    background: transparent;
-    font-family: "Segoe UI", Arial, sans-serif;
-    overflow: hidden;
+  margin: 0;
+  background: linear-gradient(160deg,#06161c,#0d2b33);
+  font-family: Arial, sans-serif;
+  color: #fff;
 }
 
-/* PANEL */
-#panel {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, #0f2a2d, #081417);
-    border-radius: 22px;
-    padding: 18px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+.container {
+  width: 420px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(20,50,58,0.85);
 }
 
-/* HEADER */
-#title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #e6fffb;
-    margin-bottom: 14px;
+.header {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 12px;
 }
 
-/* LIST */
-#list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* ROW */
 .row {
-    display: grid;
-    grid-template-columns: 40px 1fr 60px 80px;
-    align-items: center;
-    background: rgba(255,255,255,0.04);
-    padding: 10px 12px;
-    border-radius: 12px;
-    animation: slideIn 0.5s ease;
+  display: grid;
+  grid-template-columns: 1fr 70px 80px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* SERIAL */
-.no {
-    color: #7fffd4;
-    font-weight: 700;
-}
-
-/* NAME */
-.name {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* TEAM */
 .team {
-    color: #ffd166;
-    font-weight: 700;
-    font-size: 13px;
+  opacity: 0.7;
+  text-align: center;
 }
 
-/* PRICE */
 .price {
-    color: #00ffb3;
-    font-weight: 800;
-    font-size: 14px;
-    text-align: right;
+  color: #2ef2b1;
+  text-align: right;
 }
 </style>
 </head>
 
 <body>
-
-<div id="panel">
-    <div id="title">🔥 AUCTION ACTION</div>
-    <div id="list">Loading...</div>
+<div class="container">
+  <div class="header">🔥 AUCTION ACTION</div>
+  <div id="list">Loading...</div>
 </div>
 
 <script>
-const SCRIPT_URL =
-  "PASTE_YOUR_APPS_SCRIPT_URL_HERE"; // same one you used for sold players
-
 function callback(data) {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
+  const list = document.getElementById("list");
+  list.innerHTML = "";
 
-    data.players.forEach((p, i) => {
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `
-            <div class="no">${String(i+1).padStart(2,"0")}</div>
-            <div class="name">${p.player}</div>
-            <div class="team">${p.team}</div>
-            <div class="price">₹ ${p.price} Cr</div>
-        `;
-        list.appendChild(row);
-    });
+  if (!data || data.length === 0) {
+    list.innerHTML = "No activity yet";
+    return;
+  }
+
+  data.slice(0, 10).forEach(p => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div>${p.player}</div>
+      <div class="team">${p.team}</div>
+      <div class="price">₹ ${p.price}</div>
+    `;
+    list.appendChild(row);
+  });
 }
+</script>
 
-// refresh every 3 seconds
+<!-- 🔥 THIS LINE IS CRITICAL -->
+<script src="https://script.google.com/macros/s/AKfycbySgJmf-f2tVWPWuViuWJGbGnI7Ypzb5ooiHH4etmZ2rTKVQGnYQEYYnFbiic02Aai9/exec?mode=action&callback=callback"></script>
+
+<!-- Auto refresh -->
+<script>
 setInterval(() => {
-    const s = document.createElement("script");
-    s.src = SCRIPT_URL + "?mode=feed&callback=callback&t=" + Date.now();
-    document.body.appendChild(s);
+  const s = document.createElement("script");
+  s.src = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec?mode=action&callback=callback&t=" + Date.now();
+  document.body.appendChild(s);
 }, 3000);
 </script>
 
