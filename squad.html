@@ -1,88 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Auction Action</title>
+<meta charset="UTF-8" />
+<title>Team Squad</title>
 
 <style>
-body {
-  margin: 0;
-  background: linear-gradient(160deg,#06161c,#0d2b33);
-  font-family: Arial, sans-serif;
-  color: #fff;
-}
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: Arial, sans-serif;
+  }
 
-.container {
-  width: 420px;
-  padding: 16px;
-  border-radius: 14px;
-  background: rgba(20,50,58,0.85);
-}
+  .panel {
+    width: 420px;
+    background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+    border-radius: 16px;
+    padding: 18px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,.6);
+  }
 
-.header {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+  .header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 70px 80px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 60px 70px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    font-size: 14px;
+  }
 
-.team {
-  opacity: 0.7;
-  text-align: center;
-}
-
-.price {
-  color: #2ef2b1;
-  text-align: right;
-}
+  .price {
+    text-align: right;
+    color: #00ffb3;
+    font-weight: bold;
+  }
 </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="header">🔥 AUCTION ACTION</div>
+
+<div class="panel">
+  <div class="header" id="team">TEAM SQUAD</div>
   <div id="list">Loading...</div>
 </div>
 
 <script>
-function callback(data) {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbySgJmf-f2tVWPWuViuWJGbGnI7Ypzb5ooiHH4etmZ2rTKVQGnYQEYYnFbiic02Aai9/exec?mode=team&callback=callback";
 
-  if (!data || data.length === 0) {
-    list.innerHTML = "No activity yet";
-    return;
+  function callback(data) {
+    document.getElementById("team").innerText = data.team + " – FULL SQUAD";
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    data.squad.forEach(p => {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <div>${p.name}</div>
+        <div>${p.role}</div>
+        <div class="price">₹ ${p.price}</div>
+      `;
+      list.appendChild(row);
+    });
   }
 
-  data.slice(0, 10).forEach(p => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div>${p.player}</div>
-      <div class="team">${p.team}</div>
-      <div class="price">₹ ${p.price}</div>
-    `;
-    list.appendChild(row);
-  });
-}
-</script>
+  function load() {
+    const s = document.createElement("script");
+    s.src = SCRIPT_URL + "&t=" + Date.now(); // cache-buster
+    document.body.appendChild(s);
+  }
 
-<!-- 🔥 THIS LINE IS CRITICAL -->
-<script src="https://script.google.com/macros/s/AKfycbySgJmf-f2tVWPWuViuWJGbGnI7Ypzb5ooiHH4etmZ2rTKVQGnYQEYYnFbiic02Aai9/exec?mode=action&callback=callback"></script>
-
-<!-- Auto refresh -->
-<script>
-setInterval(() => {
-  const s = document.createElement("script");
-  s.src = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec?mode=action&callback=callback&t=" + Date.now();
-  document.body.appendChild(s);
-}, 3000);
+  load();
+  setInterval(load, 4000);
 </script>
 
 </body>
