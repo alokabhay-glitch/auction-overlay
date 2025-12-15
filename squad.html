@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Team Squad Overlay</title>
+<meta charset="UTF-8" />
+<title>Team Squad</title>
 
 <style>
   body {
     margin: 0;
     background: transparent;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: #fff;
+    font-family: Arial, sans-serif;
   }
 
   .panel {
@@ -17,54 +16,28 @@
     background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
     border-radius: 16px;
     padding: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,.6);
   }
 
   .header {
     font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .list {
-    max-height: 520px;
-    overflow-y: auto;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
   .row {
     display: grid;
-    grid-template-columns: 1fr 60px 80px;
-    gap: 6px;
-    padding: 8px 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    grid-template-columns: 1fr 60px 70px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
     font-size: 14px;
-  }
-
-  .name {
-    font-weight: 600;
-  }
-
-  .role {
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.8;
   }
 
   .price {
     text-align: right;
     color: #00ffb3;
-    font-weight: 700;
-  }
-
-  /* Scrollbar (OBS friendly) */
-  .list::-webkit-scrollbar {
-    width: 6px;
-  }
-  .list::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 4px;
+    font-weight: bold;
   }
 </style>
 </head>
@@ -73,13 +46,14 @@
 
 <div class="panel">
   <div class="header" id="team">TEAM SQUAD</div>
-  <div class="list" id="list">Loading...</div>
+  <div id="list">Loading...</div>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUK0HO-5fWygqWNJdohmBkOtsnsB9CNTb7VKTx1uaVvHMwgdacxsy_vhM7GNDguDfT/exec";
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbzUK0HO-5fWygqWNJdohmBkOtsnsB9CNTb7VKTx1uaVvHMwgdacxsy_vhM7GNDguDfT/exec?mode=team&callback=callback";
 
-  function handle(data) {
+  function callback(data) {
     document.getElementById("team").innerText = data.team + " – FULL SQUAD";
 
     const list = document.getElementById("list");
@@ -89,8 +63,8 @@
       const row = document.createElement("div");
       row.className = "row";
       row.innerHTML = `
-        <div class="name">${p.name}</div>
-        <div class="role">${p.role}</div>
+        <div>${p.name}</div>
+        <div>${p.role}</div>
         <div class="price">₹ ${p.price}</div>
       `;
       list.appendChild(row);
@@ -99,7 +73,7 @@
 
   function load() {
     const s = document.createElement("script");
-    s.src = SCRIPT_URL + "&t=" + Date.now();
+    s.src = SCRIPT_URL + "&t=" + Date.now(); // cache-buster
     document.body.appendChild(s);
   }
 
