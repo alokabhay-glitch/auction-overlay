@@ -114,7 +114,7 @@
     document.getElementById("team").innerText = data.team;
     document.getElementById("team2").innerText = data.team;
     document.getElementById("logo").innerText = data.team;
-    document.getElementById("purse").innerText = `₹ ${data.purse} Cr`;
+    document.getElementById("purse").innerText = `₹ ${Number(data.purse).toFixed(2)} Cr`;
     document.getElementById("slots").innerText = data.slots;
     document.getElementById("overseas").innerText = data.overseas;
   }
