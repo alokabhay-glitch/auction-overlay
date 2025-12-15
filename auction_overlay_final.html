@@ -1,76 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>IPL Auction Overlay</title>
+<meta charset="UTF-8" />
+<title>IPL Auction Sold Overlay</title>
 
 <style>
-body {
-  margin: 0;
-  background: transparent;
-  font-family: Arial, sans-serif;
-}
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
 
-.box {
-  width: 420px;
-  padding: 16px 20px;
-  background: linear-gradient(135deg, #102a43, #243b55);
-  border-radius: 12px;
-  color: #fff;
-}
+  .sold-box {
+    width: 520px;
+    padding: 24px 28px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  }
 
-.title {
-  color: #ffcc00;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
+  .title {
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #ffb703;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
 
-.player {
-  font-size: 24px;
-  font-weight: bold;
-}
+  .player {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
 
-.team {
-  font-size: 18px;
-  opacity: 0.9;
-}
+  .team {
+    font-size: 20px;
+    opacity: 0.85;
+    margin-top: 6px;
+  }
 
-.price {
-  font-size: 20px;
-  color: #00ffae;
-  font-weight: bold;
-}
+  .price {
+    margin-top: 14px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #00ffb3;
+  }
 </style>
 </head>
 
 <body>
-
-<div class="box">
-  <div class="title">🔥 SOLD 🔥</div>
-  <div class="player" id="player">Waiting…</div>
-  <div class="team" id="team"></div>
-  <div class="price" id="price"></div>
-</div>
+  <div class="sold-box">
+    <div class="title">🔥 SOLD 🔥</div>
+    <div class="player" id="player">Waiting…</div>
+    <div class="team" id="team"></div>
+    <div class="price" id="price"></div>
+  </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzfJrYJFYiwesUXlW4xk6OifHE3CEwkWKg-tcDjmfSlYLgF1DWUJ8BxzDaRkJn_UWj6/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP-4icC6wbLC4hhUmfDuTqvWK6zBmokwfi_MwBriZKtcqVGiUj3NtgSCIl5AW_eYJm/exec";
 
-function updateData(data) {
-  document.getElementById("player").innerText = data.player || "";
-  document.getElementById("team").innerText = data.team || "";
-  document.getElementById("price").innerText =
-    data.price ? `₹ ${data.price} Cr` : "";
-}
+  function callback(data) {
+    document.getElementById("player").innerText = data.player || "";
+    document.getElementById("team").innerText = data.team || "";
+    document.getElementById("price").innerText = data.price ? `₹ ${data.price} Cr` : "";
+  }
 
-function loadData() {
-  const script = document.createElement("script");
-  script.src = API_URL + "?callback=updateData&t=" + Date.now();
-  document.body.appendChild(script);
-}
+  function fetchData() {
+    const script = document.createElement("script");
+    script.src = SCRIPT_URL + "?callback=callback&ts=" + Date.now();
+    document.body.appendChild(script);
+    setTimeout(() => script.remove(), 2000);
+  }
 
-// refresh every 2 seconds
-setInterval(loadData, 2000);
-loadData();
+  fetchData();
+  setInterval(fetchData, 3000);
 </script>
 
 </body>
