@@ -1,105 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Auction Background</title>
+<title>STUMPVISION@360 – Auction Overlay</title>
 
 <style>
-  html, body {
-    width: 1920px;
-    height: 1080px;
+html, body {
     margin: 0;
     padding: 0;
+    width: 1920px;
+    height: 1080px;
     overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: transparent;
-  }
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-  /* Main background */
-  .bg {
-    position: absolute;
-    inset: 0;
+/* MAIN BACKGROUND */
+body {
     background:
-      radial-gradient(circle at top left, rgba(0,255,180,0.08), transparent 40%),
-      radial-gradient(circle at bottom right, rgba(0,120,255,0.08), transparent 45%),
-      linear-gradient(135deg, #0a141a, #0f1f29, #091318);
-  }
+        radial-gradient(circle at top left, #1e3a3a, #081418 60%),
+        linear-gradient(135deg, #081418, #02070a);
+}
 
-  /* Subtle stadium lines */
-  .grid {
+/* EVENT TITLE */
+#event-title {
     position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 80px 80px;
-    opacity: 0.4;
-  }
-
-  /* Camera zone */
-  .camera-zone {
-    position: absolute;
-    left: 30px;
-    top: 60px;
-    width: 760px;
-    height: 960px;
-    border-radius: 24px;
-    background: rgba(255,255,255,0.03);
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06);
-  }
-
-  .camera-label {
-    position: absolute;
-    bottom: -42px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #00ffb3;
+    top: 24px;
+    left: 60px;
+    font-size: 28px;
     letter-spacing: 1px;
-  }
+    font-weight: 700;
+    color: #e8fdf8;
+}
 
-  /* Right overlay column guide */
-  .right-column {
+/* BRAND NAME – TOP RIGHT */
+#brand-top {
     position: absolute;
+    top: 28px;
+    right: 60px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: rgba(120, 255, 220, 0.45);
+}
+
+/* CAMERA AREA */
+#camera-frame {
+    position: absolute;
+    left: 60px;
+    top: 80px;
+    width: 640px;
+    height: 820px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.03);
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.06),
+        0 25px 60px rgba(0,0,0,0.6);
+}
+
+/* RIGHT CONTENT AREA */
+#content-area {
+    position: absolute;
+    right: 60px;
+    top: 80px;
+    width: 1050px;
+    height: 820px;
+}
+
+/* BIG DIAGONAL WATERMARK */
+#brand-ghost {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-size: 120px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: rgba(120, 255, 220, 0.04);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* FOOTER WATERMARK */
+#brand-footer {
+    position: absolute;
+    bottom: 18px;
     right: 40px;
-    top: 60px;
-    width: 520px;
-    height: 960px;
-    border-radius: 24px;
-    background: rgba(255,255,255,0.02);
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05);
-  }
-
-  /* Section dividers */
-  .divider {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  }
-
-  .d1 { top: 210px; }
-  .d2 { top: 500px; }
-
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: rgba(120, 255, 220, 0.35);
+}
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
-<div class="grid"></div>
+<div id="event-title">IPL AUCTION 2026 • LIVE</div>
+<div id="brand-top">STUMPVISION@360</div>
 
-<!-- Camera placeholder -->
-<div class="camera-zone">
-  <div class="camera-label">LIVE CAMERA</div>
-</div>
+<!-- CAMERA PLACEHOLDER -->
+<div id="camera-frame"></div>
 
-<!-- Right column guide -->
-<div class="right-column">
-  <div class="divider d1"></div>
-  <div class="divider d2"></div>
-</div>
+<!-- OVERLAY ZONE -->
+<div id="content-area"></div>
+
+<!-- GHOST BRAND -->
+<div id="brand-ghost">STUMPVISION@360</div>
+
+<!-- FOOTER BRAND -->
+<div id="brand-footer">STUMPVISION@360</div>
 
 </body>
 </html>
