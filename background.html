@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>STUMPVISION@360 – Auction Overlay</title>
+<meta charset="UTF-8">
+<title>STUMPVISION@360 – IPL Auction</title>
 
 <style>
 html, body {
@@ -14,99 +14,129 @@ html, body {
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* MAIN BACKGROUND */
+/* ===== BACKGROUND ===== */
 body {
-    background:
-        radial-gradient(circle at top left, #1e3a3a, #081418 60%),
-        linear-gradient(135deg, #081418, #02070a);
+    background: radial-gradient(circle at top left, #1f3f40, #081418 65%);
 }
 
-/* EVENT TITLE */
+/* Animated light sweep */
+body::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: linear-gradient(
+        120deg,
+        transparent 30%,
+        rgba(80,255,220,0.06),
+        transparent 70%
+    );
+    animation: sweep 18s linear infinite;
+}
+
+@keyframes sweep {
+    from { transform: translateX(-40%); }
+    to   { transform: translateX(40%); }
+}
+
+/* Floating particles */
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(rgba(120,255,220,0.12) 1px, transparent 1px);
+    background-size: 90px 90px;
+    opacity: 0.05;
+    animation: float 40s linear infinite;
+}
+
+@keyframes float {
+    from { background-position: 0 0; }
+    to   { background-position: 300px 300px; }
+}
+
+/* ===== HEADER ===== */
 #event-title {
     position: absolute;
-    top: 24px;
+    top: 26px;
     left: 60px;
-    font-size: 28px;
-    letter-spacing: 1px;
+    font-size: 30px;
     font-weight: 700;
-    color: #e8fdf8;
+    letter-spacing: 1px;
+    color: #e6fffb;
 }
 
-/* BRAND NAME – TOP RIGHT */
+/* BRAND */
 #brand-top {
     position: absolute;
-    top: 28px;
+    top: 30px;
     right: 60px;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 2px;
-    font-weight: 600;
-    color: rgba(120, 255, 220, 0.45);
+    color: rgba(120,255,220,0.5);
 }
 
-/* CAMERA AREA */
+/* ===== CAMERA FRAME ===== */
 #camera-frame {
     position: absolute;
     left: 60px;
-    top: 80px;
-    width: 640px;
-    height: 820px;
-    border-radius: 22px;
-    background: rgba(255,255,255,0.03);
+    top: 90px;
+
+    /* UPDATED SIZE */
+    width: 720px;
+    height: 760px;
+
+    border-radius: 24px;
+    background: rgba(255,255,255,0.04);
     box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.06),
-        0 25px 60px rgba(0,0,0,0.6);
+        0 30px 70px rgba(0,0,0,0.65);
 }
 
-/* RIGHT CONTENT AREA */
+/* ===== CONTENT AREA ===== */
 #content-area {
     position: absolute;
     right: 60px;
-    top: 80px;
-    width: 1050px;
-    height: 820px;
+    top: 90px;
+    width: 1020px;
+    height: 760px;
 }
 
-/* BIG DIAGONAL WATERMARK */
+/* ===== DIAGONAL BRAND ===== */
 #brand-ghost {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-20deg);
+    transform: translate(-50%, -50%) rotate(-18deg);
     font-size: 120px;
     font-weight: 800;
     letter-spacing: 6px;
-    color: rgba(120, 255, 220, 0.04);
+    color: rgba(120,255,220,0.045);
     pointer-events: none;
     white-space: nowrap;
 }
 
-/* FOOTER WATERMARK */
+/* ===== FOOTER BRAND ===== */
 #brand-footer {
     position: absolute;
     bottom: 18px;
     right: 40px;
     font-size: 14px;
     letter-spacing: 1px;
-    color: rgba(120, 255, 220, 0.35);
+    color: rgba(120,255,220,0.35);
 }
 </style>
 </head>
 
 <body>
 
-<div id="event-title">IPL AUCTION 2026 • LIVE</div>
+<div id="event-title">IPL AUCTION 2026</div>
 <div id="brand-top">STUMPVISION@360</div>
 
-<!-- CAMERA PLACEHOLDER -->
 <div id="camera-frame"></div>
-
-<!-- OVERLAY ZONE -->
 <div id="content-area"></div>
 
-<!-- GHOST BRAND -->
 <div id="brand-ghost">STUMPVISION@360</div>
-
-<!-- FOOTER BRAND -->
 <div id="brand-footer">STUMPVISION@360</div>
 
 </body>
