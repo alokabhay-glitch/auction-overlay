@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Squad Overlay</title>
+
+<style>
+body {
+  margin: 0;
+  background: transparent;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.panel {
+  width: 520px;
+  background: linear-gradient(135deg, #0f2027, #203a43);
+  color: #fff;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.header {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.list {
+  max-height: 360px;
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 70px 80px;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 14px;
+}
+
+.role {
+  opacity: 0.8;
+}
+
+.price {
+  color: #00ffc6;
+  text-align: right;
+}
+</style>
+</head>
+
+<body>
+<div class="panel">
+  <div class="header" id="team">TEAM SQUAD</div>
+  <div class="list" id="list">Loading...</div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb3SJGJNQJr2NPSWFLEidsOzgJpvX7v691WEo68FcHwB8jeDt_SY2GaYi3BFHdMh8Q/exec";
+
+function handle(data) {
+  document.getElementById("team").innerText = data.team + " – FULL SQUAD";
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.squad.forEach(p => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div>${p.name}</div>
+      <div class="role">${p.role}</div>
+      <div class="price">${p.price ? "₹ " + p.price : ""}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+setInterval(() => {
+  const s = document.createElement("script");
+  s.src = SCRIPT_URL + "&t=" + Date.now();
+  document.body.appendChild(s);
+}, 3000);
+</script>
+</body>
+</html>
