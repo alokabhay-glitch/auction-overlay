@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IPL Team Panel</title>
+
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: "Segoe UI", Inter, Arial, sans-serif;
+  }
+
+  .panel {
+    width: 420px;
+    padding: 22px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  }
+
+  .team-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .team-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+    color: #ffd166;
+  }
+
+  .team-name {
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .stat-box {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    opacity: 0.8;
+    letter-spacing: 1px;
+  }
+
+  .stat-value {
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #00ffb3;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+  <div class="team-header">
+    <div class="team-logo" id="logo">RCB</div>
+    <div class="team-name" id="team">RCB</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-label">PURSE LEFT</div>
+      <div class="stat-value" id="purse">₹ 0</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-label">SLOTS LEFT</div>
+      <div class="stat-value" id="slots">0</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-label">OVERSEAS</div>
+      <div class="stat-value" id="overseas">0</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-label">TEAM</div>
+      <div class="stat-value" id="team2">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoP-pOSkbIOSXSdF_Tj-MIAXDxPMt4u_98_6kqITP6KeNvZnlpx5yawBcXSTlCiZ9N/exec";
+
+  function callback(data) {
+    if (!data.team) return;
+
+    document.getElementById("team").innerText = data.team;
+    document.getElementById("team2").innerText = data.team;
+    document.getElementById("logo").innerText = data.team;
+    document.getElementById("purse").innerText = `₹ ${data.purse} Cr`;
+    document.getElementById("slots").innerText = data.slots;
+    document.getElementById("overseas").innerText = data.overseas;
+  }
+
+  function fetchTeam() {
+    const s = document.createElement("script");
+    s.src = SCRIPT_URL + "?mode=team&callback=callback&ts=" + Date.now();
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 2000);
+  }
+
+  fetchTeam();
+  setInterval(fetchTeam, 3000);
+</script>
+
+</body>
+</html>
